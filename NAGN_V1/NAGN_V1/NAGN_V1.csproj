@@ -7,4 +7,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Acsset\OIP.webp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Acsset\OIP.webp" />
+  </ItemGroup>
+
 </Project>

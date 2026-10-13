@@ -4,9 +4,118 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NAGN_V1"
+        xmlns:viewmodel="clr-namespace:NAGN_V1.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="900" Width="1600">
+    <Window.DataContext>
+        <viewmodel:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--Header-->
+        <Grid Grid.Row="0" Background="Gray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="Acsset\OIP.webp" Grid.Column="0"/>
+                <Grid Grid.Column="1" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Name flow" Margin="7,0,0,0"/>
+                    <Menu VerticalAlignment="Bottom" Background="Transparent" Grid.Row="1">
+                        <MenuItem Header="_New"/>
+                        <MenuItem Header="_Open"/>
+                        <MenuItem Header="_Design" Command="{Binding OpenViewDesignFlowCommand}"/>
+                    </Menu> 
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <!--MainView-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+            <!--View Camera-->
+            <Grid Grid.Column="0" Background="Black">
+                <Image x:Name="Image_View_Camera" Margin="5"/>
+            </Grid>
+            <!--Dashboard-->
+            <Grid Grid.Column="1" Background="Gray">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Margin="10">
+                    <StackPanel>
+                        <!--RUN & STOP-->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Button Content="RUN" Background="Green" FontSize="50" Grid.Column="0"/>
+                            <Button Content="STOP" Background="Red" FontSize="50" Grid.Column="1"/>
+                        </Grid>
+                        <!--Status-->
+                        <TextBlock HorizontalAlignment="Center" Margin="0,0,0,10" Text="Status" Background="Green" FontSize="100"/>
+                        <Grid Background="White">
+                            
+                            <Grid Grid.Row="0">
+                                <StackPanel Margin="10">
+                                    <!--Run time-->
+                                    <TextBlock HorizontalAlignment="Center" Text="23.0s" FontSize="100"/>
+                                    <!--SN-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="SN: "/>
+                                        <TextBlock Text="297DN3234"/>
+                                    </StackPanel>
+                                    <!--Date-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Date: "/>
+                                        <TextBlock Text="23/06/2004"/>
+                                    </StackPanel>
+                                    <!--Pass count-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Pass: "/>
+                                        <TextBlock Text="90"/>
+                                    </StackPanel>
+                                    <!--Fail count-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Fail: "/>
+                                        <TextBlock Text="10"/>
+                                    </StackPanel>
+                                    <!--Pass rate-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Pass Rate: "/>
+                                        <TextBlock Text="90%"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                        
+                    </StackPanel>
+                </Grid>
+                <!--View log-->
+                <Grid Background="White" Grid.Row="1" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Log" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="20"/>
+                </Grid>
+            </Grid>
+            
+        </Grid>
+        
+        
     </Grid>
 </Window>
+ 

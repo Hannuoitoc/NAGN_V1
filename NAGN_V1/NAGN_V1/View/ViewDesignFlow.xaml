@@ -1,0 +1,61 @@
+﻿<Window x:Class="NAGN_V1.View.ViewDesignFlow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NAGN_V1.View"
+        mc:Ignorable="d"
+        Title="ViewDesignFlow" Height="900" Width="1600" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--Header-->
+        <Grid Grid.Row="0" Background="Gray">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="\Acsset\OIP.webp"/>
+                <Menu VerticalAlignment="Bottom" Background="Transparent">
+                    <MenuItem Header="_Save"/>
+                    <MenuItem Header="_View Setup"/>
+                    <MenuItem Header="_Connect"/>
+                    <MenuItem Header="_Run"/>
+                    <MenuItem Header="_Next"/>
+                    <MenuItem Header="_Reset"/>
+                </Menu>
+            </StackPanel>
+        </Grid>
+        <!--View set up flow-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="900"/>
+            </Grid.ColumnDefinitions>
+            <!--Algorithms tool-->
+            <Grid Grid.Column="0" Background="LightGray"></Grid>
+            <!--View flow-->
+            <Grid Grid.Column="1">
+                <Border BorderBrush="White" BorderThickness="2">
+                    <Canvas Background="DarkGray"/>
+                </Border>
+            </Grid>
+            <!--View image & set up algorithms-->
+            <Grid Grid.Column="2" Background="LightGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="500"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--Image-->
+                <Grid Grid.Row="0" Background="Black"></Grid>
+                <!--Status-->
+                <Grid Grid.Row="1" Background="Red">
+                    <TextBlock Text="Status" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
+                </Grid>
+                <!--Set up algorithms-->
+                <Grid Grid.Row="2" Background="LightGray"></Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
