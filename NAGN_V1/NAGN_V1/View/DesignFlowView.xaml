@@ -1,0 +1,146 @@
+﻿<Window x:Class="NAGN_V1.View.DesignFlowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NAGN_V1.View"
+        xmlns:viewmodel="clr-namespace:NAGN_V1.ViewModel"
+        xmlns:model="clr-namespace:NAGN_V1.Model"
+        mc:Ignorable="d"
+        Title="ViewDesignFlow" Height="900" Width="1600" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--Header-->
+        <Grid Grid.Row="0" Background="Gray">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="\Acsset\OIP.webp"/>
+                <Menu VerticalAlignment="Bottom" Background="Transparent">
+                    <MenuItem Header="_Save"/>
+                    <MenuItem Header="_View Setup"/>
+                    <MenuItem Header="_Connect"/>
+                    <MenuItem Header="_Run"/>
+                    <MenuItem Header="_Run Node" Command="{Binding RunNodeCommand}"/>
+                    <MenuItem Header="_Reset"/>
+                </Menu>
+            </StackPanel>
+        </Grid>
+        <!--View set up flow-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="900"/>
+            </Grid.ColumnDefinitions>
+            <!--Algorithms tool-->
+            <Grid Grid.Column="0" Background="LightGray">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Tiêu đề -->
+                        <RowDefinition Height="*"/>
+                        <!-- Danh sách chứa ScrollBar -->
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="TOOLBOX" Foreground="White" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                    <!-- Bọc ListBox bằng ScrollViewer -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <ListBox x:Name="Toolbox" 
+                     ItemsSource="{Binding ToolList}" 
+                     Background="Transparent" 
+                     BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <!--Tạo sự kiện cho các listboxitem-->
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                                    <!-- Giúp item được chọn ngay khi double-click -->
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="Gray" CornerRadius="4" Padding="10,8" Margin="0,3">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="\acsset\oip.webp" Width="30" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{Binding Name}" Foreground="White" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+            <!--View flow-->
+            <Grid Grid.Column="1" x:Name="CanvasContainer" ClipToBounds="True" Background="SlateGray" MouseWheel="MainCanvas_MouseWheel" >
+                <ItemsControl ItemsSource="{Binding Flow.NodeList}" 
+                  AllowDrop="True">
+
+                    <!-- ĐƯA TRANSFORM RA NGOÀI ĐÂY: GỌI ĐƯỢC TRỰC TIẾP TRONG FILE .CS -->
+                    <ItemsControl.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
+                            <TranslateTransform x:Name="CanvasTranslateTransform" X="0" Y="0"/>
+                        </TransformGroup>
+                    </ItemsControl.RenderTransform>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Background="Transparent"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <!-- Căn vị trí Node theo X,Y -->
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding CanvasX}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding CanvasY}"/>
+                            <EventSetter Event="MouseLeftButtonUp" Handler="Node_MouseLeftButtonUp"/>
+                            <EventSetter Event="MouseDown" Handler="Node_MouseDown"/>
+                            <EventSetter Event="MouseMove" Handler="Node_MouseMove"/>
+                            <EventSetter Event="MouseUp" Handler="Node_MouseUp"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <!-- Giao diện hiển thị của node trên canvas -->
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <local:NodeView/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+            <!--View image & set up algorithms-->
+            <Grid Grid.Column="2" Background="LightGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="500"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--Image-->
+                <Grid Grid.Row="0" Background="Black">
+                    <Canvas></Canvas>
+                    <Image Source="{Binding Screen_Design.Source,Mode=TwoWay}" x:Name="Screen_Design" Loaded="Screen_Design_Loaded"/>
+                </Grid>
+                <!--Status-->
+                <Grid Grid.Row="1" Background="Red">
+                    <TextBlock Text="Status" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30"/>
+                </Grid>
+                <!--Set up algorithms-->
+                <Grid Grid.Row="2" Background="LightGray">
+                    <ContentControl x:Name="NodeSetupPanel">
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type model:ImageSource}">
+                                <local:ImageSourceView/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type model:SetImage}">
+                                <local:SetImageView/>
+                            </DataTemplate>
+                        </ContentControl.Resources>
+                    </ContentControl>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

@@ -10,6 +10,6 @@ namespace NAGN_V1.Model
     public class Flow
     {
         public string Name { get; set; }
-        public ObservableCollection<Node> NodeList { get; set; }
+        public ObservableCollection<Node> NodeList { get; set; }=new ObservableCollection<Node>();
     }
 }

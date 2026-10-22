@@ -28,9 +28,9 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Name flow" Margin="7,0,0,0"/>
+                    <TextBlock Text="{Binding Flow.Name}" Margin="7,0,0,0"/>
                     <Menu VerticalAlignment="Bottom" Background="Transparent" Grid.Row="1">
-                        <MenuItem Header="_New"/>
+                        <MenuItem Header="_New" Command="{Binding NewFlowCommand}"/>
                         <MenuItem Header="_Open"/>
                         <MenuItem Header="_Design" Command="{Binding OpenViewDesignFlowCommand}"/>
                     </Menu> 

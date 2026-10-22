@@ -10,24 +10,27 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace NAGN_V1.View
 {
     /// <summary>
-    /// Interaction logic for ViewDesignFlow.xaml
+    /// Interaction logic for ThresholdView.xaml
     /// </summary>
-    public partial class ViewDesignFlow : Window
+    public partial class ThresholdView : UserControl
     {
-        public ViewDesignFlow()
+        public ThresholdView()
         {
             InitializeComponent();
         }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+            
+        private void sliderThreshold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            e.Cancel = true;
-            this.Hide();
+            if (this.DataContext is ViewModel.ThresholdeViewModel thresholdeViewModel)
+            {
+                thresholdeViewModel.Threshold.Alogorithm();
+            }
         }
     }
 }

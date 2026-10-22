@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="NAGN_V1.View.ThresholdView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NAGN_V1.View"
+             mc:Ignorable="d" 
+             MinWidth="260" MinHeight="200" Background="#1E1E1E">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
+        <Border BorderThickness="1" BorderBrush="#3F3F46" CornerRadius="6" Padding="12" Background="#252526">
+            <StackPanel>
+
+                <!-- Tên node -->
+                <TextBlock Text="Tên Node:" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <TextBox Text="{Binding Threshold.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         Foreground="White" Background="#1E1E1E" 
+                         BorderBrush="#3F3F46" Padding="6,4" Margin="0,0,0,12" 
+                         FontSize="12" FontWeight="SemiBold"/>
+
+                <!-- Nguồn ảnh đầu vào -->
+                <TextBlock Text="Nguồn ảnh (Input):" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding listImageNotThis}" 
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Id"
+                          SelectedValue="{Binding Threshold.ImageId, Mode=TwoWay}"
+                          Background="#1E1E1E" Foreground="Black" 
+                        BorderBrush="#3F3F46" Padding="6,4" Margin="0,0,0,12" FontSize="11">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Background" Value="#252526"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Padding" Value="6,4"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+
+                <!-- Min -->
+                <TextBlock Text="Ngưỡng tối thiểu (Min):" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <Grid Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider x:Name="sliderMinThreshold" Grid.Column="0"
+                            Minimum="0" Maximum="255"
+                            Value="{Binding Threshold.Min, Mode=TwoWay}"
+                            VerticalAlignment="Center"
+                            Foreground="#007ACC" ValueChanged="sliderThreshold_ValueChanged"/>
+                    <TextBox Grid.Column="1"
+                             Text="{Binding Threshold.Min, Mode=TwoWay}"
+                             Foreground="White" Background="#1E1E1E" 
+                             BorderBrush="#3F3F46" Padding="4,2" 
+                             FontSize="11" TextAlignment="Center" Margin="6,0,0,0"/>
+                </Grid>
+
+                <!-- Max -->
+                <TextBlock Text="Ngưỡng tối đa (Max):" Foreground="#AAAAAA" FontSize="11" Margin="0,8,0,4"/>
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider x:Name="sliderMaxThreshold" Grid.Column="0"
+                            Minimum="0" Maximum="255"
+                            Value="{Binding Threshold.Max, Mode=TwoWay}"
+                            VerticalAlignment="Center"
+                            Foreground="#007ACC" SmallChange="11"
+                            ValueChanged="sliderThreshold_ValueChanged"
+                            />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding Threshold.Max, Mode=TwoWay}"
+                             Foreground="White" Background="#1E1E1E" 
+                             BorderBrush="#3F3F46" Padding="4,2" 
+                             FontSize="11" TextAlignment="Center" Margin="6,0,0,0"/>
+                </Grid>
+
+                <!-- Preview ảnh kết quả -->
+                <TextBlock Text="Xem trước kết quả:" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <Border MinHeight="120" MaxHeight="250" Background="#1E1E1E" 
+                        BorderBrush="#3F3F46" BorderThickness="1" CornerRadius="4" Margin="0,0,0,12">
+                    <Grid>
+                        <Image Source="{Binding Threshold.ThresholdImage}" Stretch="Uniform"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="Chưa có kết quả" Foreground="#555555" FontSize="11"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Threshold.ThresholdImage}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </Border>
+
+                <!-- Mô tả -->
+                <TextBlock Text="Description:" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <TextBox Text="{Binding Threshold.Description, Mode=TwoWay}" 
+                         Foreground="#CCCCCC" Background="#1E1E1E" 
+                         BorderBrush="#3F3F46" Padding="6" MinHeight="60" MaxHeight="120"
+                         TextWrapping="Wrap" AcceptsReturn="True" 
+                         VerticalScrollBarVisibility="Auto" FontSize="11"/>
+
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>

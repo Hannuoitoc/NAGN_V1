@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="NAGN_V1.View.SetImageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NAGN_V1.View"
+             mc:Ignorable="d" 
+             MinWidth="260" MinHeight="200" Background="#1E1E1E">
+
+    <!-- THANH CUỘN BỌC TOÀN BỘ NỘI DUNG -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                  HorizontalScrollBarVisibility="Disabled"
+                  Focusable="False">
+
+        <Border BorderThickness="1" BorderBrush="#3F3F46" CornerRadius="6" Padding="12" Background="#252526">
+            <StackPanel>
+                <!-- Tên node -->
+                <TextBlock Text="Tên Node:" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <TextBox Text="{Binding SetImage.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         Foreground="White" Background="#1E1E1E" 
+                         BorderBrush="#3F3F46" Padding="6,4" Margin="0,0,0,12" 
+                         FontSize="12" FontWeight="SemiBold"/>
+
+                <!-- ComboBox 1: Chọn nguồn dữ liệu thả xuống -->
+                <TextBlock Text="Chọn nguồn (Input):" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding listImage}" 
+                        DisplayMemberPath="Name"
+                        SelectedValuePath="Id"
+                        SelectedValue="{Binding SetImage.ImageId, Mode=TwoWay}"
+                        Background="#1E1E1E" Foreground="Black" 
+                        BorderBrush="#3F3F46" Padding="6,4" Margin="0,0,0,12" FontSize="11">  
+                    <!-- THÊM STYLE NÀY ĐỂ MENU THẢ XUỐNG CÓ NỀN TỐI VÀ CHỮ TRẮNG RÕ RÀNG -->
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Background" Value="#252526"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Padding" Value="6,4"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+                <!-- ComboBox 2: Chọn tùy chọn thả xuống -->
+                <TextBlock Text="Chọn tùy chọn (Option):" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <ComboBox ItemsSource="{Binding listScreen}" 
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Screen"
+                          SelectedValue="{Binding SetImage.Screen, Mode=TwoWay}"
+                          Background="#1E1E1E" Foreground="Black" 
+                          BorderBrush="#3F3F46" Padding="6,4" Margin="0,0,0,12" FontSize="11">  
+                    <!-- THÊM STYLE NÀY ĐỂ MENU THẢ XUỐNG CÓ NỀN TỐI VÀ CHỮ TRẮNG RÕ RÀNG -->
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Background" Value="#252526"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="Padding" Value="6,4"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+
+                <!-- Mô tả -->
+                <TextBlock Text="Description:" Foreground="#AAAAAA" FontSize="11" Margin="0,0,0,4"/>
+                <TextBox Text="{Binding SetImage.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         Foreground="#CCCCCC" Background="#1E1E1E" 
+                         BorderBrush="#3F3F46" Padding="6" MinHeight="60" MaxHeight="120"
+                         TextWrapping="Wrap" AcceptsReturn="True" 
+                         VerticalScrollBarVisibility="Auto" FontSize="11"/>
+            </StackPanel>
+        </Border>
+    </ScrollViewer>
+</UserControl>
