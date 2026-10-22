@@ -76,40 +76,54 @@
                 </Grid>
             </Grid>
             <!--View flow-->
-            <Grid Grid.Column="1" x:Name="CanvasContainer" ClipToBounds="True" Background="SlateGray" MouseWheel="MainCanvas_MouseWheel" >
-                <ItemsControl ItemsSource="{Binding Flow.NodeList}" 
-                  AllowDrop="True">
-
-                    <!-- ĐƯA TRANSFORM RA NGOÀI ĐÂY: GỌI ĐƯỢC TRỰC TIẾP TRONG FILE .CS -->
-                    <ItemsControl.RenderTransform>
+            <Grid Grid.Column="1" x:Name="CanvasContainer" ClipToBounds="True" Background="SlateGray" MouseWheel="MainCanvas_MouseWheel">
+                <!-- Grid bọc chung mang Transform để cả Node và Dây nối cùng Zoom/Pan -->
+                <Grid>
+                    <Grid.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform x:Name="CanvasScaleTransform" ScaleX="1" ScaleY="1"/>
                             <TranslateTransform x:Name="CanvasTranslateTransform" X="0" Y="0"/>
                         </TransformGroup>
-                    </ItemsControl.RenderTransform>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas Background="Transparent"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <!-- Căn vị trí Node theo X,Y -->
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="ContentPresenter">
-                            <Setter Property="Canvas.Left" Value="{Binding CanvasX}"/>
-                            <Setter Property="Canvas.Top" Value="{Binding CanvasY}"/>
-                            <EventSetter Event="MouseLeftButtonUp" Handler="Node_MouseLeftButtonUp"/>
-                            <EventSetter Event="MouseDown" Handler="Node_MouseDown"/>
-                            <EventSetter Event="MouseMove" Handler="Node_MouseMove"/>
-                            <EventSetter Event="MouseUp" Handler="Node_MouseUp"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <!-- Giao diện hiển thị của node trên canvas -->
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <local:NodeView/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </Grid.RenderTransform>
+                    <!-- 1. Canvas vẽ dây nối (gọi được LineCanvas trong file .cs, nằm dưới các Node) -->
+                    <Canvas x:Name="LineCanvas" Background="Transparent" IsHitTestVisible="False"/>
+                    <!-- 2. ItemsControl hiển thị các Node (nằm trên dây nối) -->
+                    <ItemsControl ItemsSource="{Binding Flow.NodeList}" 
+                      AllowDrop="True" 
+                      MouseLeftButtonDown="BottomPort_MouseDown" 
+                      MouseLeftButtonUp="TopPort_MouseUp">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Background="Transparent"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <!-- Căn vị trí Node theo X,Y -->
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Left" Value="{Binding CanvasX}"/>
+                                <Setter Property="Canvas.Top" Value="{Binding CanvasY}"/>
+                                <EventSetter Event="MouseLeftButtonUp" Handler="Node_MouseLeftButtonUp"/>
+                                <EventSetter Event="MouseDown" Handler="Node_MouseDown"/>
+                                <EventSetter Event="MouseMove" Handler="Node_MouseMove"/>
+                                <EventSetter Event="MouseUp" Handler="Node_MouseUp"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <!-- Giao diện hiển thị của node trên canvas -->
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border>
+                                    <local:NodeView/>
+                                    <Border.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Xóa node" Click="Click_Remove_Node" />
+                                            <MenuItem Header="Xóa line" Click="Click_Remove_Line_Node" />
+                                        </ContextMenu>
+                                    </Border.ContextMenu>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
             </Grid>
             <!--View image & set up algorithms-->
             <Grid Grid.Column="2" Background="LightGray">

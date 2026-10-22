@@ -53,7 +53,7 @@ namespace NAGN_V1.ViewModel
         private async void ThresholdeAlogorithm(int min, int max)
         {
             if (Threshold.ImageId == null) return;
-            if (listImage.FirstOrDefault(n => n.Id == Threshold.ImageId) is Model.ImageSource imageSource)
+            if (listImage.FirstOrDefault(n => n.Id == Threshold.ImageId) is Model.ImageSource imageSource&&imageSource.image!=null)
             {
                 min = Math.Clamp(min, 0, 255);
                 max = Math.Clamp(max, 0, 255);

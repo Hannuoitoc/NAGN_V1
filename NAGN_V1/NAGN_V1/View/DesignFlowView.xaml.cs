@@ -132,7 +132,14 @@ namespace NAGN_V1.View
         private Model.Node? draggingNode;
         private void Node_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is FrameworkElement element && element.DataContext is Model.Node selectedNode)
+            if (e.OriginalSource is FrameworkElement sourceElement)
+            {
+                if (sourceElement.Name == "BottomPort" || sourceElement.Name == "TopPort")
+                {
+                    return;
+                }
+            }
+            if (sender is FrameworkElement element && element.DataContext is Model.Node selectedNode )
             {
                 isDragging = true;
                 draggingNode = selectedNode;
@@ -198,6 +205,99 @@ namespace NAGN_V1.View
             CanvasScaleTransform.ScaleX = _currentZoom;
             CanvasScaleTransform.ScaleY = _currentZoom;
         }
+        //Tạo kết nối giữa các node
+        private Model.Node? _connectingFrom;
 
+        private void BottomPort_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.OriginalSource is FrameworkElement el && el.Name == "BottomPort" && el.DataContext is Model.Node node)
+            {
+                _connectingFrom = node;
+                e.Handled=true;
+            }
+        }
+
+        private void TopPort_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_connectingFrom == null) return;
+            if(_connectingFrom.NextNodeId==null&& e.OriginalSource is FrameworkElement el && el.Name=="TopPort" && el.DataContext is Model.Node target && _connectingFrom != target)
+            {
+                _connectingFrom.NextNodeId = target.Id;
+                DrawLine(_connectingFrom, target);
+            }
+            _connectingFrom=null;
+        }
+        private void DrawLine(Model.Node from, Model.Node to)
+        {
+            var line = new Line
+            {
+                Stroke = Brushes.DodgerBlue,
+                StrokeThickness = 2,
+                X1 = from.CanvasX + 90,
+                Y1 = from.CanvasY + 110, // BottomPort
+                X2 = to.CanvasX + 90,
+                Y2 = to.CanvasY,           // TopPort
+                Tag =from.Id
+            };
+            // Tự động cập nhật vị trí khi kéo node
+            // Chỉ cập nhật khi tọa độ X hoặc Y thay đổi, và đưa về UI Thread qua Dispatcher
+            from.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(Model.Node.CanvasX) || e.PropertyName == nameof(Model.Node.CanvasY))
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        line.X1 = from.CanvasX + 90;
+                        line.Y1 = from.CanvasY + 110;
+                    });
+                }
+            };
+            to.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(Model.Node.CanvasX) || e.PropertyName == nameof(Model.Node.CanvasY))
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        line.X2 = to.CanvasX + 90;
+                        line.Y2 = to.CanvasY;
+                    });
+                }
+            };
+            LineCanvas.Children.Insert(0, line); // Nằm dưới các Node
+            
+        }
+        private void RemoveLine(Model.Node node)
+        {
+            Line? lineToRemove = null;
+            foreach(var child in LineCanvas.Children)
+            {
+                if(child is Line line&&line.Tag as string == node.Id)
+                {
+                    lineToRemove = line;
+                    break;
+                }
+            }
+            if(lineToRemove != null)
+            {
+                LineCanvas.Children.Remove(lineToRemove);
+            }
+            node.NextNodeId = null;
+        }
+
+        private void Click_Remove_Node(object sender, RoutedEventArgs e)
+        {
+            if(sender is FrameworkElement el && el.DataContext is Model.Node node)
+            {
+                MessageBox.Show("Chua co chuc nang");
+            }
+        }
+
+        private void Click_Remove_Line_Node(object sender, RoutedEventArgs e)
+        {
+            if(sender is FrameworkElement el && el.DataContext is Model.Node node)
+            {
+                RemoveLine(node);
+            }
+        }
     }
 }

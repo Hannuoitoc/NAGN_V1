@@ -70,5 +70,15 @@ namespace NAGN_V1.Model
         {
             Alogorithm?.Invoke();
         }
+        private string? _nextNodeId;
+        public string? NextNodeId
+        {
+            get => _nextNodeId;
+            set
+            {
+                _nextNodeId = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }
